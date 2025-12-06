@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agrobot - The Innovators</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #09090b; /* Zinc 950 */
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .font-tech { font-family: 'Orbitron', sans-serif; }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #18181b; }
+        ::-webkit-scrollbar-thumb { background: #22c55e; border-radius: 4px; }
+
+        /* Animation Classes */
+        .reveal-up {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .reveal-up.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Tech Background Grid */
+        .bg-grid {
+            background-size: 50px 50px;
+            background-image: linear-gradient(to right, rgba(34, 197, 94, 0.03) 1px, transparent 1px),
+                              linear-gradient(to bottom, rgba(34, 197, 94, 0.03) 1px, transparent 1px);
+        }
+
+        /* Card Hover Effect */
+        .tech-card {
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+        .tech-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(34, 197, 94, 0.5);
+            box-shadow: 0 10px 40px -10px rgba(34, 197, 94, 0.3);
+        }
+        
+        .role-badge {
+            background: linear-gradient(90deg, rgba(20,83,45,0.5) 0%, rgba(9,9,11,0) 100%);
+            border-left: 2px solid #22c55e;
+        }
+    </style>
+</head>
+<body class="antialiased bg-grid min-h-screen flex flex-col">
+
+    <nav class="fixed top-0 w-full z-50 flex justify-between items-center px-6 py-4 bg-zinc-950/80 backdrop-blur-md border-b border-zinc-800">
+        <a href="index.html" class="text-xl font-bold font-tech text-white tracking-wider flex items-center gap-2">
+            AGROBOT<span class="text-green-500">.</span>
+        </a>
+        
+        <div class="hidden md:flex space-x-8 text-sm font-medium text-zinc-300">
+            <a href="home.html" class="hover:text-green-400 transition-colors">Home</a>
+            <a href="about.html" class="hover:text-green-400 transition-colors">About</a>
+            <a href="whyagrobot.html" class="hover:text-green-600 transition-colors">Why Agrobot</a>
+            <a href="process.html" class="hover:text-green-400 transition-colors">Process</a>
+            <a href="team.html" class="text-green-400">Team</a>
+        </div>
+
+        <a href="home.html#contact" class="hidden md:flex items-center text-xs font-bold text-black bg-green-500 hover:bg-green-400 px-5 py-2 rounded-full transition-colors shadow-[0_0_15px_rgba(34,197,94,0.4)]">
+            CONTACT US
+        </a>
+        
+        <button class="md:hidden text-zinc-300"><i data-lucide="menu"></i></button>
+    </nav>
+
+    <header class="pt-32 pb-16 px-6 text-center relative">
+        <h2 class="text-green-500 font-bold tracking-[0.5em] text-xs md:text-sm mb-4 animate-pulse">THE INNOVATORS</h2>
+        <h1 class="text-4xl md:text-6xl font-tech font-black text-white mb-6">Meet the <span class="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600">Team</span></h1>
+        <p class="text-zinc-400 max-w-xl mx-auto text-sm md:text-base leading-relaxed">
+            The brilliant minds bridging the gap between agriculture and autonomous technology.
+        </p>
+    </header>
+
+    <section class="container mx-auto px-6 pb-24">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+
+            <div class="tech-card bg-zinc-900/50 border border-zinc-800 rounded-2xl overflow-hidden group reveal-up relative">
+                <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/90 z-10"></div>
+                
+                <div class="h-80 w-full bg-zinc-800 relative">
+                    <img src="profile.png" alt="A D Karthik balaaji" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500 grayscale group-hover:grayscale-0">
+                    <div class="absolute top-0 left-0 w-full h-[1px] bg-green-500/20"></div>
+                    <div class="absolute bottom-0 left-0 w-full h-[1px] bg-green-500/20"></div>
+                </div>
+
+                <div class="absolute bottom-0 left-0 w-full p-6 z-20">
+                    <div class="role-badge pl-3 py-1 mb-2">
+                        <span class="text-green-400 text-xs font-mono font-bold tracking-wider uppercase">Lead Engineer</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white font-tech mb-1 group-hover:text-green-400 transition-colors">A D Karthik balaaji</h3>
+                    
+                    <a href="mailto:karthikbalaaji8@gmail.com" class="flex items-center gap-2 text-zinc-500 text-xs mt-3 hover:text-white transition-colors">
+                        <i data-lucide="mail" class="w-3 h-3"></i>
+                        karthikbalaaji8@gmail.com
+                    </a>
+                </div>
+            </div>
+
+            <div class="tech-card bg-zinc-900/50 border border-zinc-800 rounded-2xl overflow-hidden group reveal-up" style="transition-delay: 100ms;">
+                <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/90 z-10"></div>
+                
+                <div class="h-80 w-full bg-zinc-800 relative">
+                    <img src="profile.png" alt="T N Ganeshkarthick" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500 grayscale group-hover:grayscale-0">
+                </div>
+
+                <div class="absolute bottom-0 left-0 w-full p-6 z-20">
+                    <div class="role-badge pl-3 py-1 mb-2">
+                        <span class="text-green-400 text-xs font-mono font-bold tracking-wider uppercase">Software Dev</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white font-tech mb-1 group-hover:text-green-400 transition-colors">T N Ganeshkarthick</h3>
+                    
+                    <a href="mailto:ganeshkarthicktn4321@gmail.com" class="flex items-center gap-2 text-zinc-500 text-xs mt-3 hover:text-white transition-colors">
+                        <i data-lucide="mail" class="w-3 h-3"></i>
+                        ganeshkarthicktn4321@gmail.com
+                    </a>
+                </div>
+            </div>
+
+            <div class="tech-card bg-zinc-900/50 border border-zinc-800 rounded-2xl overflow-hidden group reveal-up" style="transition-delay: 200ms;">
+                <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/90 z-10"></div>
+                
+                <div class="h-80 w-full bg-zinc-800 relative">
+                    <img src="profile.png" alt="B Anirudh" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500 grayscale group-hover:grayscale-0">
+                </div>
+
+                <div class="absolute bottom-0 left-0 w-full p-6 z-20">
+                    <div class="role-badge pl-3 py-1 mb-2">
+                        <span class="text-green-400 text-xs font-mono font-bold tracking-wider uppercase">Hardware Specialist</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white font-tech mb-1 group-hover:text-green-400 transition-colors">B Anirudh</h3>
+                    
+                    <a href="mailto:anirudhbk2009@gmail.com" class="flex items-center gap-2 text-zinc-500 text-xs mt-3 hover:text-white transition-colors">
+                        <i data-lucide="mail" class="w-3 h-3"></i>
+                        anirudhbk2009@gmail.com
+                    </a>
+                </div>
+            </div>
+
+            <div class="tech-card bg-zinc-900/50 border border-zinc-800 rounded-2xl overflow-hidden group reveal-up" style="transition-delay: 300ms;">
+                <div class="absolute inset-0 bg-gradient-to-b from-transparent to-black/90 z-10"></div>
+                
+                <div class="h-80 w-full bg-zinc-800 relative">
+                    <img src="profile.png" alt="B Dharshan" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity duration-500 grayscale group-hover:grayscale-0">
+                </div>
+
+                <div class="absolute bottom-0 left-0 w-full p-6 z-20">
+                    <div class="role-badge pl-3 py-1 mb-2">
+                        <span class="text-green-400 text-xs font-mono font-bold tracking-wider uppercase">Research & IoT</span>
+                    </div>
+                    <h3 class="text-xl font-bold text-white font-tech mb-1 group-hover:text-green-400 transition-colors">B Dharshan</h3>
+                    
+                    <a href="mailto:dharshanreddy052008@gmail.com" class="flex items-center gap-2 text-zinc-500 text-xs mt-3 hover:text-white transition-colors">
+                        <i data-lucide="mail" class="w-3 h-3"></i>
+                        dharshanreddy052008@gmail.com
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <footer class="border-t border-zinc-800 bg-black py-12 text-center mt-auto">
+        <div class="flex items-center justify-center gap-2 mb-4">
+            <div class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+            <span class="text-green-500 font-mono text-xs">AGROBOT TEAM</span>
+        </div>
+        <p class="text-zinc-600 text-xs font-mono uppercase tracking-widest">© 2025 Agrobot Technologies.</p>
+    </footer>
+
+    <script>
+        lucide.createIcons();
+
+        // Scroll Reveal
+        const revealElements = document.querySelectorAll('.reveal-up');
+        const checkScroll = () => {
+            const triggerBottom = window.innerHeight * 0.85;
+            revealElements.forEach(el => {
+                const elementTop = el.getBoundingClientRect().top;
+                if(elementTop < triggerBottom) {
+                    el.classList.add('active');
+                }
+            });
+        }
+        window.addEventListener('scroll', checkScroll);
+        checkScroll();
+    </script>
+</body>
+</html>
