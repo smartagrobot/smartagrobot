@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Agrobot - Future Farming</title>
     
     <script src="https://cdn.tailwindcss.com"></script>
@@ -21,27 +21,56 @@
 
         .font-tech { font-family: 'Orbitron', sans-serif; }
 
+        /* Custom Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: #18181b; }
         ::-webkit-scrollbar-thumb { background: #22c55e; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #4ade80; }
 
-        /* HERO TEXT GLITCH EFFECT */
+        /* --- LAYERING CONFIGURATION --- */
+        
+        /* 1. The Canvas (Ball) - IN FRONT */
+        #canvas-container {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 10; 
+            pointer-events: auto; /* Enable pointer events for rotation */
+            touch-action: none; /* Prevents scrolling when touching the ball */
+        }
+
+        /* 2. The Text - BEHIND */
         .hero-text {
-            font-size: clamp(2.5rem, 11vw, 10rem);
+            /* Responsive Font Size: 13vw makes it scale perfectly with mobile width */
+            font-size: clamp(3rem, 13vw, 10rem); 
             line-height: 0.9;
             letter-spacing: -0.05em;
             color: #052e16;
             position: relative;
+            z-index: 1; /* Low Z-index puts it behind the ball */
+            
+            /* SYNCHRONIZED RISING ANIMATION */
+            opacity: 0;
+            animation: riseFromDepths 2.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; 
         }
 
+        @keyframes riseFromDepths {
+            0% {
+                transform: translateY(110vh) scale(0.9);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Glitch Effect */
         .hero-text::before, .hero-text::after {
             content: "AGROBOT.";
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             opacity: 0;
         }
-
         .hero-text:hover::before {
             color: #4ade80;
             z-index: -1;
@@ -72,12 +101,6 @@
             100% { transform: translate(0); }
         }
 
-        #canvas-container {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 0; pointer-events: none;
-        }
-
         .reveal-up {
             opacity: 0;
             transform: translateY(50px);
@@ -96,9 +119,7 @@
             transition: transform 0.1s ease-out;
             transform-style: preserve-3d;
         }
-        .tilt-content {
-            transform: translateZ(20px);
-        }
+        .tilt-content { transform: translateZ(20px); }
 
         @keyframes float {
             0% { transform: translateY(0px); }
@@ -116,9 +137,7 @@
             background-clip: text;
             animation: shimmer 3s linear infinite;
         }
-        @keyframes shimmer {
-            to { background-position: 200% center; }
-        }
+        @keyframes shimmer { to { background-position: 200% center; } }
 
         html { scroll-behavior: smooth; }
     </style>
@@ -158,10 +177,12 @@
         <a href="team.html" class="mobile-link">Team</a>
     </div>
 
-    <section class="relative min-h-[90vh] md:min-h-screen flex flex-col justify-center items-center pt-24 px-4 md:px-8 z-10" id="hero">
-        <h2 class="text-white font-bold tracking-[0.5em] text-xs md:text-base mb-2 md:mb-4 animate-pulse">AUTOMATED FARMING</h2>
+    <section class="relative min-h-[90vh] md:min-h-screen flex flex-col justify-center items-center pt-24 px-4 md:px-8 z-0" id="hero">
+        <h2 class="text-white font-bold tracking-[0.5em] text-xs md:text-base mb-2 md:mb-4 animate-pulse relative z-[1]" style="animation: riseFromDepths 2.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;">AUTOMATED FARMING</h2>
+        
         <h1 class="hero-text font-tech font-black text-center mb-4 mix-blend-multiply cursor-default">AGROBOT.</h1>
-        <p class="text-green-900 font-mono text-xs md:text-sm mt-4 opacity-0 animate-[fadeIn_2s_ease-in_forwards] delay-1000">SCROLL TO INITIALIZE SYSTEM</p>
+        
+        <p class="text-green-900 font-mono text-xs md:text-sm mt-4 opacity-0 animate-[fadeIn_2s_ease-in_forwards] delay-2000 relative z-[1]">SCROLL TO INITIALIZE SYSTEM</p>
     </section>
 
     <section class="relative bg-zinc-900 min-h-screen z-20 rounded-t-[2rem] md:rounded-t-[3rem] shadow-[0_-20px_60px_rgba(0,0,0,0.5)] mt-4 md:mt-0 overflow-hidden">
@@ -187,6 +208,9 @@
                         <h3 class="reveal-up text-green-500 text-xs font-bold tracking-[0.3em] uppercase mb-4">About The Project</h3>
                         <h2 class="reveal-up stagger-1 text-3xl md:text-4xl font-bold text-white mb-6 font-tech">Autonomous <br> <span class="text-shimmer">Field Assistant</span></h2>
                         <p class="reveal-up stagger-2 text-zinc-300 text-base md:text-lg leading-relaxed mb-6">Agrobot is an autonomous agricultural robot designed to revolutionize traditional farming methods. By integrating robotics, artificial intelligence, and IoT connectivity, Agrobot handles labor-intensive tasks with unmatched precision.</p>
+                        
+                        
+
                         <p class="reveal-up stagger-3 text-zinc-400 text-sm md:text-base leading-relaxed">It serves as a comprehensive field assistant, capable of navigating complex crop rows to monitor health, dispense nutrients, and manage pests—all while sending real-time data back to the farmer's dashboard.</p>
                     </div>
                 </div>
@@ -320,7 +344,9 @@
 
             const isMobile = window.innerWidth < 768;
             const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-            camera.position.z = isMobile ? 22 : 15;
+            
+            // Adjust camera Z position for mobile to fit content better
+            camera.position.z = isMobile ? 24 : 15;
 
             const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
@@ -429,6 +455,15 @@
                 mouseY = (event.clientY - windowHalfY) * 0.001;
             });
 
+            // ADD TOUCH SUPPORT
+            document.addEventListener('touchmove', (event) => {
+                if (event.touches.length > 0) {
+                    const touch = event.touches[0];
+                    mouseX = (touch.clientX - windowHalfX) * 0.002; 
+                    mouseY = (touch.clientY - windowHalfY) * 0.002;
+                }
+            });
+
             const animate = () => {
                 requestAnimationFrame(animate);
 
@@ -481,7 +516,7 @@
 
             window.addEventListener('resize', () => {
                 const newIsMobile = window.innerWidth < 768;
-                camera.position.z = newIsMobile ? 22 : 15;
+                camera.position.z = newIsMobile ? 24 : 15;
 
                 camera.aspect = window.innerWidth / window.innerHeight;
                 camera.updateProjectionMatrix();
