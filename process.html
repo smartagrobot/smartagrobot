@@ -64,19 +64,21 @@
             AGROBOT<span class="text-green-500">.</span>
         </a>
         
-        <div class="hidden md:flex space-x-8 text-sm font-medium text-zinc-300">
-            <a href="home.html" class="hover:text-green-400 transition-colors">Home</a>
-            <a href="about.html" class="hover:text-green-400 transition-colors">About</a>
-            <a href="whyagrobot.html" class="hover:text-green-600 transition-colors">Why Agrobot</a>
-            <a href="process.html" class="text-green-400">Process</a>
-            <a href="team.html" class="hover:text-green-400 transition-colors">Team</a>
-        </div>
+        <div class="flex items-center gap-8">
+            <div class="hidden md:flex space-x-8 text-sm font-medium text-zinc-300">
+                <a href="home.html" class="hover:text-green-400 transition-colors">Home</a>
+                <a href="about.html" class="hover:text-green-400 transition-colors">About</a>
+                <a href="whyagrobot.html" class="hover:text-green-400 transition-colors">Why Agrobot</a>
+                <a href="process.html" class="text-green-400">Process</a>
+                <a href="team.html" class="hover:text-green-400 transition-colors">Team</a>
+            </div>
 
-        <a href="home.html#contact" class="hidden md:flex items-center text-xs font-bold text-black bg-green-500 hover:bg-green-400 px-5 py-2 rounded-full transition-colors shadow-[0_0_15px_rgba(34,197,94,0.4)]">
-            CONTACT US
-        </a>
-        
-        <button class="md:hidden text-zinc-300"><i data-lucide="menu"></i></button>
+            <a href="home.html#contact" class="hidden md:flex items-center text-xs font-bold text-black bg-green-500 hover:bg-green-400 px-5 py-2 rounded-full transition-colors shadow-[0_0_15px_rgba(34,197,94,0.4)]">
+                CONTACT US
+            </a>
+            
+            <button class="md:hidden text-zinc-300"><i data-lucide="menu"></i></button>
+        </div>
     </nav>
 
     <header class="pt-32 pb-16 px-6 text-center relative overflow-hidden">
@@ -112,6 +114,11 @@
                     <p class="text-zinc-300 text-sm mb-4 leading-relaxed">
                         The process begins with vision. Agrobot utilizes an <strong>ESP-32 CAM</strong> module equipped with a trained machine learning model.
                     </p>
+                    
+                    <div class="my-4 p-2 bg-zinc-950/50 rounded border border-zinc-800 text-xs text-zinc-500 text-center font-mono">
+                        
+                    </div>
+
                     <ul class="text-zinc-500 text-xs text-left md:text-right space-y-2 font-mono border-t border-zinc-800 pt-3">
                         <li>• Scans the field row-by-row.</li>
                         <li>• Differentiates between crop leaves and weeds.</li>
@@ -130,7 +137,7 @@
                     </div>
 
                     <div class="w-full h-48 mb-6 bg-black/40 border-2 border-dashed border-zinc-700 rounded-lg flex flex-col items-center justify-center text-zinc-500 font-mono text-xs group-hover:border-green-500/30 transition-colors overflow-hidden">
-                        <img src="seed.jpg" alt="Smart Weeding" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110">
+                        <img src="seed.jpg" alt="Seed Dispensing" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110">
                     </div>
 
                     <p class="text-zinc-300 text-sm mb-4 leading-relaxed">
@@ -162,7 +169,7 @@
                     </div>
 
                     <div class="w-full h-48 mb-6 bg-black/40 border-2 border-dashed border-zinc-700 rounded-lg flex flex-col items-center justify-center text-zinc-500 font-mono text-xs group-hover:border-green-500/30 transition-colors overflow-hidden">
-                        <img src="moist.jpg" alt="Smart Weeding" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110">
+                        <img src="moist.jpg" alt="Moisture Control" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110">
                     </div>
                     
                     <p class="text-zinc-300 text-sm mb-4">
@@ -188,7 +195,7 @@
                     </div>
 
                     <div class="w-full h-48 mb-6 bg-black/40 border-2 border-dashed border-zinc-700 rounded-lg flex flex-col items-center justify-center text-zinc-500 font-mono text-xs group-hover:border-green-500/30 transition-colors overflow-hidden">
-                        <img src="water.jpeg" alt="Smart Weeding" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110">
+                        <img src="water.jpeg" alt="Water Dispensing" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110">
                     </div>
                     
                     <p class="text-zinc-300 text-sm mb-4 leading-relaxed">
@@ -220,7 +227,7 @@
                     </div>
 
                     <div class="w-full h-48 mb-6 bg-black/40 border-2 border-dashed border-zinc-700 rounded-lg flex flex-col items-center justify-center text-zinc-500 font-mono text-xs group-hover:border-green-500/30 transition-colors overflow-hidden">
-                        <img src="pest.jpg" alt="Smart Weeding" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110">
+                        <img src="pest.jpg" alt="Pesticide" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110">
                     </div>
 
                     <p class="text-zinc-300 text-sm mb-4 leading-relaxed">
@@ -243,12 +250,19 @@
                     </div>
 
                     <div class="w-full h-48 mb-6 bg-black/50 border-2 border-dashed border-green-500/30 rounded-lg flex flex-col items-center justify-center text-green-500/50 font-mono text-xs group-hover:border-green-500 transition-colors overflow-hidden">
-                        <img src="blynk.jpeg" alt="Smart Weeding" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110">
+                        <img src="blynk.jpeg" alt="IoT Integration" class="w-full h-full object-cover transition-transform duration-700 hover:scale-110">
                     </div>
 
                     <p class="text-zinc-300 text-sm mb-4">
                         The brain of the operation connects to the cloud. Using the <strong>Blynk Platform</strong>, Agrobot offers a live dashboard accessible from any smartphone.
                     </p>
+
+                    <div class="my-4 p-2 bg-zinc-950/50 rounded border border-zinc-800 text-xs text-zinc-500 text-center font-mono">
+                        
+
+[Image of IoT data flow diagram from sensor to cloud to app]
+
+                    </div>
                     
                     <div class="grid grid-cols-2 gap-4 mt-4">
                         <div class="bg-black/40 p-3 rounded border border-zinc-800">
@@ -269,6 +283,21 @@
             <div class="order-1 md:w-5/12"></div>
         </div>
 
+    </section>
+
+    <section class="container mx-auto px-6 pb-24 reveal-up">
+        <div class="text-center bg-zinc-900/50 border border-zinc-800 p-10 rounded-3xl">
+            <h2 class="text-3xl md:text-5xl font-tech font-bold mb-4">
+                Ready to Revolutionize Your Farm?
+            </h2>
+            <p class="text-zinc-400 max-w-2xl mx-auto mb-8">
+                Stop guessing and start optimizing. Contact our specialists today for a detailed consultation and see your potential savings.
+            </p>
+            <a href="home.html#contact" class="inline-flex items-center gap-3 text-sm font-bold text-black bg-green-500 hover:bg-green-400 px-8 py-3 rounded-full transition-colors shadow-[0_0_20px_rgba(34,197,94,0.6)] uppercase tracking-wider">
+                <i data-lucide="arrow-right-circle" class="w-5 h-5"></i>
+                Get a Free Demo
+            </a>
+        </div>
     </section>
 
     <footer class="border-t border-zinc-800 bg-black py-12 text-center">
