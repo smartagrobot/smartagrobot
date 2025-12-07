@@ -7,7 +7,7 @@
     
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Orbitron:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
 
     <style>
@@ -16,20 +16,60 @@
             overflow-x: hidden;
             margin: 0;
             background-color: #f0fdf4;
+            perspective: 1000px;
         }
 
         .font-tech { font-family: 'Orbitron', sans-serif; }
 
         ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f1f1; }
-        ::-webkit-scrollbar-thumb { background: #4ade80; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #22c55e; }
+        ::-webkit-scrollbar-track { background: #18181b; }
+        ::-webkit-scrollbar-thumb { background: #22c55e; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #4ade80; }
 
+        /* HERO TEXT GLITCH EFFECT */
         .hero-text {
             font-size: clamp(2.5rem, 11vw, 10rem);
             line-height: 0.9;
             letter-spacing: -0.05em;
             color: #052e16;
+            position: relative;
+        }
+
+        .hero-text::before, .hero-text::after {
+            content: "AGROBOT.";
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0;
+        }
+
+        .hero-text:hover::before {
+            color: #4ade80;
+            z-index: -1;
+            animation: glitch-anim-1 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) both infinite;
+            opacity: 1;
+        }
+        .hero-text:hover::after {
+            color: #14532d;
+            z-index: -2;
+            animation: glitch-anim-2 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94) reverse both infinite;
+            opacity: 1;
+        }
+
+        @keyframes glitch-anim-1 {
+            0% { transform: translate(0); }
+            20% { transform: translate(-2px, 2px); }
+            40% { transform: translate(-2px, -2px); }
+            60% { transform: translate(2px, 2px); }
+            80% { transform: translate(2px, -2px); }
+            100% { transform: translate(0); }
+        }
+        @keyframes glitch-anim-2 {
+            0% { transform: translate(0); }
+            20% { transform: translate(2px, -2px); }
+            40% { transform: translate(2px, 2px); }
+            60% { transform: translate(-2px, 2px); }
+            80% { transform: translate(-2px, -2px); }
+            100% { transform: translate(0); }
         }
 
         #canvas-container {
@@ -38,15 +78,46 @@
             z-index: 0; pointer-events: none;
         }
 
-        /* Animation Classes */
         .reveal-up {
             opacity: 0;
             transform: translateY(50px);
-            transition: all 0.8s ease-out;
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
         .reveal-up.active {
             opacity: 1;
             transform: translateY(0);
+        }
+
+        .stagger-1 { transition-delay: 100ms; }
+        .stagger-2 { transition-delay: 200ms; }
+        .stagger-3 { transition-delay: 300ms; }
+
+        .tilt-card {
+            transition: transform 0.1s ease-out;
+            transform-style: preserve-3d;
+        }
+        .tilt-content {
+            transform: translateZ(20px);
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .animate-float { animation: float 4s ease-in-out infinite; }
+        .animate-float-delayed { animation: float 4s ease-in-out 2s infinite; }
+
+        .text-shimmer {
+            background: linear-gradient(to right, #22c55e 20%, #86efac 50%, #22c55e 80%);
+            background-size: 200% auto;
+            color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: shimmer 3s linear infinite;
+        }
+        @keyframes shimmer {
+            to { background-position: 200% center; }
         }
 
         html { scroll-behavior: smooth; }
@@ -57,7 +128,7 @@
     <div id="canvas-container"></div>
 
     <nav class="fixed top-0 w-full z-50 flex justify-between items-center px-4 md:px-12 py-4 md:py-6 transition-all duration-300" id="navbar">
-        <div class="hidden md:flex space-x-8 text-sm font-medium text-green-900 bg-white/60 backdrop-blur-md px-6 py-3 rounded-full border border-green-100 shadow-sm">
+        <div class="hidden md:flex space-x-8 text-sm font-medium text-green-900 bg-white/60 backdrop-blur-md px-6 py-3 rounded-full border border-green-100 shadow-sm hover:shadow-green-500/20 hover:scale-105 transition-all">
             <a href="home.html" class="hover:text-green-600 transition-colors">Home</a>
             <a href="about.html" class="hover:text-green-600 transition-colors">About</a>
             <a href="whyagrobot.html" class="hover:text-green-600 transition-colors">Why Agrobot</a>
@@ -72,7 +143,7 @@
         <div class="flex items-center space-x-6">
             <a href="https://docs.google.com/forms/d/e/1FAIpQLScI73jcXbUT1UbQky4h16ni5ktVahzHGodnOftGGCA65o2hgg/viewform" 
                target="_blank"
-               class="text-xs md:text-sm font-semibold text-white bg-green-600 hover:bg-green-700 px-4 md:px-5 py-2 md:py-2.5 rounded-full shadow-lg shadow-green-600/20 transition-all flex items-center group">
+               class="text-xs md:text-sm font-semibold text-white bg-green-600 hover:bg-green-500 px-4 md:px-5 py-2 md:py-2.5 rounded-full shadow-lg shadow-green-600/20 transition-all flex items-center group hover:scale-110 active:scale-95">
                 Launch Form
                 <i data-lucide="arrow-right" class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform"></i>
             </a>
@@ -89,7 +160,8 @@
 
     <section class="relative min-h-[90vh] md:min-h-screen flex flex-col justify-center items-center pt-24 px-4 md:px-8 z-10" id="hero">
         <h2 class="text-white font-bold tracking-[0.5em] text-xs md:text-base mb-2 md:mb-4 animate-pulse">AUTOMATED FARMING</h2>
-        <h1 class="hero-text font-tech font-black text-center mb-4 mix-blend-multiply select-none">AGROBOT.</h1>
+        <h1 class="hero-text font-tech font-black text-center mb-4 mix-blend-multiply cursor-default">AGROBOT.</h1>
+        <p class="text-green-900 font-mono text-xs md:text-sm mt-4 opacity-0 animate-[fadeIn_2s_ease-in_forwards] delay-1000">SCROLL TO INITIALIZE SYSTEM</p>
     </section>
 
     <section class="relative bg-zinc-900 min-h-screen z-20 rounded-t-[2rem] md:rounded-t-[3rem] shadow-[0_-20px_60px_rgba(0,0,0,0.5)] mt-4 md:mt-0 overflow-hidden">
@@ -97,20 +169,25 @@
         <div id="about" class="border-b border-zinc-800 bg-zinc-900 py-12 md:pt-24 md:pb-16 px-6 rounded-t-[2rem] md:rounded-t-[3rem]">
             <div class="container mx-auto max-w-6xl">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
-                    <div class="reveal-up relative group order-2 md:order-1">
-                        <div class="absolute -inset-1 bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-                        <div class="relative rounded-2xl overflow-hidden border border-zinc-700 shadow-2xl">
-                            <img src="agrobot2.jpeg" class="w-full object-cover h-64 md:h-auto transition-transform duration-700 hover:scale-110" alt="Agrobot Prototype">
-                            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 md:p-6 pointer-events-none">
-                                <p class="text-green-400 text-[10px] md:text-xs font-mono uppercase tracking-widest">Model: A-01 Prototype</p>
+                    
+                    <div class="reveal-up relative group order-2 md:order-1 tilt-card-container">
+                        <div class="tilt-card relative rounded-2xl overflow-hidden border border-zinc-700 shadow-2xl bg-zinc-800">
+                            <div class="absolute -inset-1 bg-gradient-to-r from-green-600 to-emerald-600 rounded-2xl blur opacity-25 group-hover:opacity-75 transition duration-500"></div>
+                            <img src="agrobot2.jpeg" class="w-full object-cover h-64 md:h-auto relative z-10" alt="Agrobot Prototype">
+                            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/90 to-transparent p-4 md:p-6 pointer-events-none z-20 tilt-content">
+                                <p class="text-green-400 text-[10px] md:text-xs font-mono uppercase tracking-widest flex items-center gap-2">
+                                    <span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                                    Model: A-01 Prototype
+                                </p>
                             </div>
                         </div>
                     </div>
-                    <div class="reveal-up text-left order-1 md:order-2">
-                        <h3 class="text-green-500 text-xs font-bold tracking-[0.3em] uppercase mb-4">About The Project</h3>
-                        <h2 class="text-3xl md:text-4xl font-bold text-white mb-6 font-tech">Autonomous <br> <span class="text-green-500">Field Assistant</span></h2>
-                        <p class="text-zinc-300 text-base md:text-lg leading-relaxed mb-6">Agrobot is an autonomous agricultural robot designed to revolutionize traditional farming methods. By integrating robotics, artificial intelligence, and IoT connectivity, Agrobot handles labor-intensive tasks with unmatched precision.</p>
-                        <p class="text-zinc-400 text-sm md:text-base leading-relaxed">It serves as a comprehensive field assistant, capable of navigating complex crop rows to monitor health, dispense nutrients, and manage pests—all while sending real-time data back to the farmer's dashboard.</p>
+
+                    <div class="text-left order-1 md:order-2">
+                        <h3 class="reveal-up text-green-500 text-xs font-bold tracking-[0.3em] uppercase mb-4">About The Project</h3>
+                        <h2 class="reveal-up stagger-1 text-3xl md:text-4xl font-bold text-white mb-6 font-tech">Autonomous <br> <span class="text-shimmer">Field Assistant</span></h2>
+                        <p class="reveal-up stagger-2 text-zinc-300 text-base md:text-lg leading-relaxed mb-6">Agrobot is an autonomous agricultural robot designed to revolutionize traditional farming methods. By integrating robotics, artificial intelligence, and IoT connectivity, Agrobot handles labor-intensive tasks with unmatched precision.</p>
+                        <p class="reveal-up stagger-3 text-zinc-400 text-sm md:text-base leading-relaxed">It serves as a comprehensive field assistant, capable of navigating complex crop rows to monitor health, dispense nutrients, and manage pests—all while sending real-time data back to the farmer's dashboard.</p>
                     </div>
                 </div>
             </div>
@@ -119,30 +196,47 @@
         <div id="why-agrobot" class="border-b border-zinc-800 bg-zinc-900 py-12 md:py-24 px-6">
             <div class="container mx-auto max-w-6xl">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 items-center">
-                    <div class="reveal-up">
-                        <h2 class="text-green-400 tracking-[0.5em] text-sm font-bold mb-4">ADVANTAGES</h2>
-                        <h2 class="text-3xl md:text-5xl font-bold text-white mb-6 font-tech">Why Choose Agrobot?</h2>
-                        <p class="text-zinc-400 text-base md:text-lg leading-relaxed mb-10">In an era where efficiency and sustainability are paramount, Agrobot provides the technological edge needed to maximize yield while minimizing effort and environmental impact.</p>
+                    <div>
+                        <h2 class="reveal-up text-green-400 tracking-[0.5em] text-sm font-bold mb-4">ADVANTAGES</h2>
+                        <h2 class="reveal-up stagger-1 text-3xl md:text-5xl font-bold text-white mb-6 font-tech">Why Choose Agrobot?</h2>
+                        <p class="reveal-up stagger-2 text-zinc-400 text-base md:text-lg leading-relaxed mb-10">In an era where efficiency and sustainability are paramount, Agrobot provides the technological edge needed to maximize yield while minimizing effort and environmental impact.</p>
+                        
                         <div class="space-y-8">
-                            <div class="flex items-start gap-6 group">
-                                <div class="w-12 h-12 bg-green-500/10 rounded-lg flex-shrink-0 flex items-center justify-center text-green-400 group-hover:bg-green-500 group-hover:text-white transition-colors"><i data-lucide="trending-up" class="w-6 h-6"></i></div>
-                                <div><h3 class="text-xl font-bold text-white mb-2 font-tech">Increased Yield</h3><p class="text-zinc-500 text-sm leading-relaxed group-hover:text-zinc-400 transition-colors">Optimized care for every single plant ensures healthier crops and significantly higher harvest outputs.</p></div>
+                            <div class="reveal-up stagger-1 flex items-start gap-6 group hover:translate-x-2 transition-transform duration-300 cursor-default">
+                                <div class="w-12 h-12 bg-green-500/10 rounded-lg flex-shrink-0 flex items-center justify-center text-green-400 group-hover:bg-green-500 group-hover:text-white transition-colors animate-float">
+                                    <i data-lucide="trending-up" class="w-6 h-6"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-white mb-2 font-tech group-hover:text-green-400 transition-colors">Increased Yield</h3>
+                                    <p class="text-zinc-500 text-sm leading-relaxed group-hover:text-zinc-400 transition-colors">Optimized care for every single plant ensures healthier crops and significantly higher harvest outputs.</p>
+                                </div>
                             </div>
-                            <div class="flex items-start gap-6 group">
-                                <div class="w-12 h-12 bg-green-500/10 rounded-lg flex-shrink-0 flex items-center justify-center text-green-400 group-hover:bg-green-500 group-hover:text-white transition-colors"><i data-lucide="leaf" class="w-6 h-6"></i></div>
-                                <div><h3 class="text-xl font-bold text-white mb-2 font-tech">Resource Efficiency</h3><p class="text-zinc-500 text-sm leading-relaxed group-hover:text-zinc-400 transition-colors">Precise water and chemical application reduces waste by up to 40%, saving costs and protecting the soil.</p></div>
+                            <div class="reveal-up stagger-2 flex items-start gap-6 group hover:translate-x-2 transition-transform duration-300 cursor-default">
+                                <div class="w-12 h-12 bg-green-500/10 rounded-lg flex-shrink-0 flex items-center justify-center text-green-400 group-hover:bg-green-500 group-hover:text-white transition-colors animate-float-delayed">
+                                    <i data-lucide="leaf" class="w-6 h-6"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-white mb-2 font-tech group-hover:text-green-400 transition-colors">Resource Efficiency</h3>
+                                    <p class="text-zinc-500 text-sm leading-relaxed group-hover:text-zinc-400 transition-colors">Precise water and chemical application reduces waste by up to 40%, saving costs and protecting the soil.</p>
+                                </div>
                             </div>
-                            <div class="flex items-start gap-6 group">
-                                <div class="w-12 h-12 bg-green-500/10 rounded-lg flex-shrink-0 flex items-center justify-center text-green-400 group-hover:bg-green-500 group-hover:text-white transition-colors"><i data-lucide="bar-chart-3" class="w-6 h-6"></i></div>
-                                <div><h3 class="text-xl font-bold text-white mb-2 font-tech">Data-Driven Decisions</h3><p class="text-zinc-500 text-sm leading-relaxed group-hover:text-zinc-400 transition-colors">Continuous monitoring provides actionable insights, taking the guesswork out of farming management.</p></div>
+                            <div class="reveal-up stagger-3 flex items-start gap-6 group hover:translate-x-2 transition-transform duration-300 cursor-default">
+                                <div class="w-12 h-12 bg-green-500/10 rounded-lg flex-shrink-0 flex items-center justify-center text-green-400 group-hover:bg-green-500 group-hover:text-white transition-colors animate-float">
+                                    <i data-lucide="bar-chart-3" class="w-6 h-6"></i>
+                                </div>
+                                <div>
+                                    <h3 class="text-xl font-bold text-white mb-2 font-tech group-hover:text-green-400 transition-colors">Data-Driven Decisions</h3>
+                                    <p class="text-zinc-500 text-sm leading-relaxed group-hover:text-zinc-400 transition-colors">Continuous monitoring provides actionable insights, taking the guesswork out of farming management.</p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="reveal-up relative group h-full flex items-center mt-8 md:mt-0">
-                        <div class="absolute -inset-1 bg-gradient-to-l from-green-600 to-emerald-600 rounded-2xl blur opacity-25 group-hover:opacity-50 transition duration-1000 group-hover:duration-200"></div>
-                        <div class="relative rounded-2xl overflow-hidden border border-zinc-700 shadow-2xl w-full">
-                            <img src="agrobot.jpeg" class="w-full object-cover transition-transform duration-700 hover:scale-110" alt="Agrobot IoT Sensor">
-                            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 text-right pointer-events-none">
+
+                    <div class="reveal-up relative group h-full flex items-center mt-8 md:mt-0 tilt-card-container">
+                        <div class="tilt-card relative rounded-2xl overflow-hidden border border-zinc-700 shadow-2xl w-full bg-zinc-800">
+                            <div class="absolute -inset-1 bg-gradient-to-l from-green-600 to-emerald-600 rounded-2xl blur opacity-25 group-hover:opacity-75 transition duration-500"></div>
+                            <img src="agrobot.jpeg" class="w-full object-cover relative z-10" alt="Agrobot IoT Sensor">
+                            <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-6 text-right pointer-events-none z-20 tilt-content">
                                 <p class="text-green-400 text-xs font-mono uppercase tracking-widest">Tech: IoT Sensor Array</p>
                             </div>
                         </div>
@@ -152,7 +246,7 @@
         </div>
 
         <div id="contact" class="container mx-auto px-6 py-12 md:py-24 text-center reveal-up">
-            <a href="https://docs.google.com/forms/d/e/1FAIpQLScI73jcXbUT1UbQky4h16ni5ktVahzHGodnOftGGCA65o2hgg/viewform" target="_blank" class="inline-block bg-white text-black font-bold px-8 py-3 md:px-10 md:py-4 rounded-lg hover:bg-green-400 hover:text-white transition-colors uppercase tracking-widest text-sm md:text-base">Launch Contact Form</a>
+            <a href="https://docs.google.com/forms/d/e/1FAIpQLScI73jcXbUT1UbQky4h16ni5ktVahzHGodnOftGGCA65o2hgg/viewform" target="_blank" class="inline-block bg-white text-black font-bold px-8 py-3 md:px-10 md:py-4 rounded-lg hover:bg-green-500 hover:text-white hover:scale-105 transition-all shadow-[0_0_20px_rgba(34,197,94,0.3)] uppercase tracking-widest text-sm md:text-base">Launch Contact Form</a>
             <footer class="mt-16 text-zinc-600 text-[10px] md:text-xs tracking-widest uppercase">© 2025 Agrobot Technologies. System Status: Normal.</footer>
         </div>
     </section>
@@ -160,6 +254,7 @@
     <script>
         lucide.createIcons();
 
+        // --- MENU LOGIC ---
         const menuBtn = document.getElementById('menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
         const mobileLinks = document.querySelectorAll('.mobile-link');
@@ -186,10 +281,42 @@
             });
         });
 
+        // --- 3D TILT EFFECT LOGIC ---
+        const tiltContainers = document.querySelectorAll('.tilt-card-container');
+        
+        tiltContainers.forEach(container => {
+            const card = container.querySelector('.tilt-card');
+            
+            container.addEventListener('mousemove', (e) => {
+                const rect = container.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+                
+                // Calculate rotation (max 15 degrees)
+                const xRotation = -1 * ((y - rect.height/2) / rect.height * 15);
+                const yRotation = (x - rect.width/2) / rect.width * 15;
+                
+                // Apply transform
+                card.style.transform = `perspective(1000px) scale(1.05) rotateX(${xRotation}deg) rotateY(${yRotation}deg)`;
+            });
+
+            container.addEventListener('mouseleave', () => {
+                card.style.transform = 'perspective(1000px) scale(1) rotateX(0) rotateY(0)';
+            });
+        });
+
+        // --- THREE.JS BACKGROUND ---
         const initThreeJS = () => {
             const container = document.getElementById('canvas-container');
             const scene = new THREE.Scene();
             scene.background = new THREE.Color(0xf0fdf4); 
+
+            // Create a Group to hold the spheres and points
+            const mainGroup = new THREE.Group();
+            scene.add(mainGroup);
+
+            // Initial Y Position (Start below screen)
+            mainGroup.position.y = -35; 
 
             const isMobile = window.innerWidth < 768;
             const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -235,7 +362,8 @@
                 metalness: 0.2, 
             });
             const oceanSphere = new THREE.Mesh(oceanGeometry, oceanMaterial);
-            scene.add(oceanSphere);
+            // Add to Group, not Scene
+            mainGroup.add(oceanSphere);
 
             const landGeometry = new THREE.SphereGeometry(BALL_RADIUS, 128, 128);
             const landMaterial = new THREE.MeshStandardMaterial({ 
@@ -249,7 +377,8 @@
                 metalness: 0.1,
             });
             const landSphere = new THREE.Mesh(landGeometry, landMaterial);
-            scene.add(landSphere);
+            // Add to Group
+            mainGroup.add(landSphere);
 
             const geometry = new THREE.BufferGeometry();
             const positions = new Float32Array(PARTICLE_COUNT * 3);
@@ -287,7 +416,8 @@
             });
 
             const points = new THREE.Points(geometry, material);
-            scene.add(points);
+            // Add to Group
+            mainGroup.add(points);
 
             let mouseX = 0;
             let mouseY = 0;
@@ -302,6 +432,10 @@
             const animate = () => {
                 requestAnimationFrame(animate);
 
+                // --- INTRO ANIMATION: RISE FROM BOTTOM ---
+                // Smoothly lerp the group position from -35 to 0
+                mainGroup.position.y += (0 - mainGroup.position.y) * 0.025;
+
                 const scrollY = window.scrollY;
                 const viewHeight = window.innerHeight;
                 
@@ -311,18 +445,23 @@
                 
                 oceanSphere.material.opacity = opacity;
                 landSphere.material.opacity = opacity;
+                
+                // Hide when scrolled out to save resources
                 oceanSphere.visible = opacity > 0.01;
                 landSphere.visible = opacity > 0.01;
 
+                // Mouse Camera Movement
                 camera.position.x += (mouseX * 5 - camera.position.x) * 0.05;
                 camera.position.y += (-mouseY * 5 - camera.position.y) * 0.05;
                 camera.lookAt(scene.position);
 
+                // Rotation
                 const autoSpeed = 0.008; 
                 oceanSphere.rotation.y += autoSpeed;
                 landSphere.rotation.y += autoSpeed;
                 points.rotation.y += autoSpeed;
 
+                // Scroll Explosion Effect
                 let explosionFactor = Math.min(scrollY / viewHeight, 1.5) * 8.0; 
 
                 const posArray = geometry.attributes.position.array;
