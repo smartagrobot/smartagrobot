@@ -16,7 +16,6 @@
             overflow-x: hidden;
             margin: 0;
             background-color: #f0fdf4;
-            /* REMOVED perspective: 1000px from here to fix mobile menu rendering glitch */
         }
 
         .font-tech { font-family: 'Orbitron', sans-serif; }
@@ -26,8 +25,6 @@
         ::-webkit-scrollbar-thumb { background: #22c55e; border-radius: 4px; }
 
         /* --- Z-INDEX LAYERING --- */
-        
-        /* 1. Canvas (Ball) - BEHIND */
         #canvas-container {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -36,30 +33,54 @@
             touch-action: none;
         }
 
-        /* 2. Text - IN FRONT */
+        /* --- UPDATED: SUPER INTENSE NEON GLOW --- */
+        .neon-text-intense {
+            color: #ffffff;
+            /* Multiple layers of shadow for maximum brightness */
+            text-shadow: 
+                0 0 5px #fff,
+                0 0 10px #fff,
+                0 0 20px #4ade80,
+                0 0 35px #4ade80,
+                0 0 50px #22c55e,
+                0 0 60px #22c55e;
+        }
+
+        /* --- CHAOTIC FLY-IN ANIMATION (OPTIMIZED) --- */
         .hero-text {
             font-size: clamp(3rem, 13vw, 10rem); 
             line-height: 0.9;
             letter-spacing: -0.05em;
             color: #052e16;
             position: relative;
-            z-index: 10; /* Sits on top of ball */
-            
-            /* Animation: Rises from bottom */
+            z-index: 10;
+        }
+
+        .hero-text span {
+            display: inline-block;
             opacity: 0;
-            animation: riseFromDepths 2.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; 
+            will-change: transform, opacity;
+            animation: chaoticFlyIn 1.2s cubic-bezier(0.19, 1, 0.22, 1) forwards;
         }
 
-        @keyframes riseFromDepths {
-            0% { transform: translateY(110vh) scale(0.8); opacity: 0; }
-            100% { transform: translateY(0) scale(1); opacity: 1; }
+        @keyframes chaoticFlyIn {
+            0% { 
+                opacity: 0; 
+                transform: translate(var(--tx), var(--ty)) rotate(var(--r)) scale(3);
+            }
+            100% { 
+                opacity: 1; 
+                transform: translate(0, 0) rotate(0deg) scale(1);
+            }
         }
 
+        /* Glitch Effect */
         .hero-text::before, .hero-text::after {
             content: "AGROBOT.";
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
             opacity: 0;
+            pointer-events: none;
         }
         .hero-text:hover::before {
             color: #4ade80;
@@ -91,6 +112,16 @@
             100% { transform: translate(0); }
         }
 
+        /* Subtext Animation */
+        .fade-in-delayed {
+            opacity: 0;
+            animation: simpleFadeUp 1s ease-out forwards;
+        }
+        @keyframes simpleFadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
         .reveal-up {
             opacity: 0;
             transform: translateY(50px);
@@ -101,7 +132,7 @@
         .tilt-card { transition: transform 0.1s ease-out; transform-style: preserve-3d; }
         .tilt-content { transform: translateZ(20px); }
 
-        /* Mobile Menu Visibility */
+        /* Mobile Menu */
         .mobile-menu-hidden { opacity: 0; pointer-events: none; }
         .mobile-menu-visible { opacity: 1; pointer-events: auto; }
         body.menu-open { overflow: hidden; }
@@ -162,11 +193,11 @@
     </div>
 
     <section class="relative min-h-[90vh] md:min-h-screen flex flex-col justify-center items-center pt-24 px-4 md:px-8 z-0" id="hero">
-        <h2 class="text-white font-bold tracking-[0.5em] text-xs md:text-base mb-2 md:mb-4 animate-pulse relative z-10" style="opacity: 0; animation: riseFromDepths 2.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;">AUTOMATED FARMING</h2>
+        <h2 class="neon-text-intense font-black tracking-[0.3em] text-base md:text-2xl mb-2 md:mb-4 animate-pulse relative z-10 fade-in-delayed" style="animation-delay: 2.5s;">AUTOMATED FARMING</h2>
         
-        <h1 class="hero-text font-tech font-black text-center mb-4 cursor-default">AGROBOT.</h1>
+        <h1 class="hero-text font-tech font-black text-center mb-4 cursor-default" id="hero-title">AGROBOT.</h1>
         
-        <p class="text-green-900 font-mono text-xs md:text-sm mt-4 relative z-10" style="opacity: 0; animation: riseFromDepths 2.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;">SCROLL TO INITIALIZE SYSTEM</p>
+        <p class="text-green-900 font-mono text-xs md:text-sm mt-4 relative z-10 fade-in-delayed" style="animation-delay: 2.8s;">SCROLL TO INITIALIZE SYSTEM</p>
     </section>
 
     <section class="relative bg-zinc-900 min-h-screen z-20 rounded-t-[2rem] md:rounded-t-[3rem] shadow-[0_-20px_60px_rgba(0,0,0,0.5)] mt-4 md:mt-0 overflow-hidden">
@@ -193,8 +224,6 @@
                         <h2 class="reveal-up stagger-1 text-3xl md:text-4xl font-bold text-white mb-6 font-tech">Autonomous <br> <span class="text-shimmer">Field Assistant</span></h2>
                         <p class="reveal-up stagger-2 text-zinc-300 text-base md:text-lg leading-relaxed mb-6">Agrobot is an autonomous agricultural robot designed to revolutionize traditional farming methods. By integrating robotics, artificial intelligence, and IoT connectivity, Agrobot handles labor-intensive tasks with unmatched precision.</p>
                         
-                        
-
                         <p class="reveal-up stagger-3 text-zinc-400 text-sm md:text-base leading-relaxed">It serves as a comprehensive field assistant, capable of navigating complex crop rows to monitor health, dispense nutrients, and manage pests—all while sending real-time data back to the farmer's dashboard.</p>
                     </div>
                 </div>
@@ -262,6 +291,25 @@
     <script>
         lucide.createIcons();
 
+        // --- CHAOTIC RANDOM DIRECTION ANIMATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            const titleElement = document.getElementById('hero-title');
+            const text = "AGROBOT.";
+            titleElement.innerHTML = text.split('').map((char, index) => {
+                const startX = (Math.random() - 0.5) * 2000; 
+                const startY = (Math.random() - 0.5) * 2000; 
+                const rotate = (Math.random() - 0.5) * 360; 
+                const delay = 0.2 + (index * 0.1); 
+
+                return `<span style="
+                    --tx: ${startX}px; 
+                    --ty: ${startY}px; 
+                    --r: ${rotate}deg; 
+                    animation-delay: ${delay}s
+                ">${char}</span>`;
+            }).join('');
+        });
+
         // --- MENU LOGIC ---
         const menuBtn = document.getElementById('menu-btn');
         const closeMenuBtn = document.getElementById('close-menu-btn');
@@ -273,8 +321,6 @@
             mobileMenu.classList.remove('mobile-menu-hidden');
             mobileMenu.classList.add('mobile-menu-visible');
             body.classList.add('menu-open');
-            
-            // UPDATED: Added lucide.createIcons() so the new icon actually renders
             menuBtn.innerHTML = '<i data-lucide="x" class="w-6 h-6"></i>';
             lucide.createIcons(); 
         }
@@ -283,8 +329,6 @@
             mobileMenu.classList.remove('mobile-menu-visible');
             mobileMenu.classList.add('mobile-menu-hidden');
             body.classList.remove('menu-open');
-            
-            // UPDATED: Added lucide.createIcons() so the new icon actually renders
             menuBtn.innerHTML = '<i data-lucide="menu" class="w-6 h-6"></i>';
             lucide.createIcons();
         }
@@ -307,7 +351,6 @@
                 const y = e.clientY - rect.top;
                 const xRotation = -1 * ((y - rect.height/2) / rect.height * 15);
                 const yRotation = (x - rect.width/2) / rect.width * 15;
-                // Perspective is applied here inline, so we don't need it on the body
                 card.style.transform = `perspective(1000px) scale(1.05) rotateX(${xRotation}deg) rotateY(${yRotation}deg)`;
             });
             container.addEventListener('mouseleave', () => {
@@ -315,14 +358,14 @@
             });
         });
 
-        // --- THREE.JS BACKGROUND ---
+        // --- THREE.JS BACKGROUND (OPTIMIZED) ---
         const initThreeJS = () => {
             const container = document.getElementById('canvas-container');
             const scene = new THREE.Scene();
             
             const mainGroup = new THREE.Group();
             scene.add(mainGroup);
-            mainGroup.position.y = -35; // Start below screen
+            mainGroup.position.y = -35; 
 
             const isMobile = window.innerWidth < 768;
             const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
@@ -330,7 +373,8 @@
 
             const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
-            renderer.setPixelRatio(window.devicePixelRatio); 
+            // Optimization: Limit pixel ratio
+            renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); 
             container.appendChild(renderer.domElement);
 
             const ambientLight = new THREE.AmbientLight(0xffffff, 0.8); 
@@ -347,7 +391,7 @@
             rimLight.position.set(-5, 5, -5);
             scene.add(rimLight);
 
-            const PARTICLE_COUNT = isMobile ? 30000 : 60000; 
+            const PARTICLE_COUNT = isMobile ? 10000 : 20000; 
             const BALL_RADIUS = 4.5; 
             
             const textureLoader = new THREE.TextureLoader();
@@ -356,7 +400,7 @@
             grassTexture.wrapT = THREE.RepeatWrapping;
             grassTexture.repeat.set(6, 6);
 
-            const oceanGeometry = new THREE.SphereGeometry(BALL_RADIUS - 0.05, 128, 128); 
+            const oceanGeometry = new THREE.SphereGeometry(BALL_RADIUS - 0.05, 48, 48); 
             const oceanMaterial = new THREE.MeshStandardMaterial({ 
                 color: 0x1e4620, 
                 map: grassTexture,
@@ -368,7 +412,7 @@
             const oceanSphere = new THREE.Mesh(oceanGeometry, oceanMaterial);
             mainGroup.add(oceanSphere);
 
-            const landGeometry = new THREE.SphereGeometry(BALL_RADIUS, 128, 128);
+            const landGeometry = new THREE.SphereGeometry(BALL_RADIUS, 64, 64);
             const landMaterial = new THREE.MeshStandardMaterial({ 
                 color: 0x4ade80, 
                 map: grassTexture,
