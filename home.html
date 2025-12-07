@@ -16,7 +16,7 @@
             overflow-x: hidden;
             margin: 0;
             background-color: #f0fdf4;
-            perspective: 1000px;
+            /* REMOVED perspective: 1000px from here to fix mobile menu rendering glitch */
         }
 
         .font-tech { font-family: 'Orbitron', sans-serif; }
@@ -144,16 +144,16 @@
         </div>
     </nav>
 
-    <div id="mobile-menu" class="fixed inset-0 z-[100] bg-white flex flex-col items-center justify-center gap-8 mobile-menu-hidden transition-all duration-300">
+    <div id="mobile-menu" class="fixed inset-0 z-[9999] bg-white flex flex-col items-center justify-center gap-8 mobile-menu-hidden transition-all duration-300">
         <button id="close-menu-btn" class="absolute top-6 right-4 p-3 bg-zinc-900 text-white rounded-full shadow-lg active:scale-90 transition-transform">
             <i data-lucide="x" class="w-6 h-6"></i>
         </button>
 
-        <a href="home.html" class="mobile-link text-4xl font-tech font-bold text-black hover:text-green-600">Home</a>
-        <a href="about.html" class="mobile-link text-4xl font-tech font-bold text-black hover:text-green-600">About</a>
-        <a href="whyagrobot.html" class="mobile-link text-4xl font-tech font-bold text-black hover:text-green-600">Why Agrobot</a>
-        <a href="process.html" class="mobile-link text-4xl font-tech font-bold text-black hover:text-green-600">Process</a>
-        <a href="team.html" class="mobile-link text-4xl font-tech font-bold text-black hover:text-green-600">Team</a>
+        <a href="home.html" class="mobile-link block text-4xl font-tech font-bold text-black hover:text-green-600">Home</a>
+        <a href="about.html" class="mobile-link block text-4xl font-tech font-bold text-black hover:text-green-600">About</a>
+        <a href="whyagrobot.html" class="mobile-link block text-4xl font-tech font-bold text-black hover:text-green-600">Why Agrobot</a>
+        <a href="process.html" class="mobile-link block text-4xl font-tech font-bold text-black hover:text-green-600">Process</a>
+        <a href="team.html" class="mobile-link block text-4xl font-tech font-bold text-black hover:text-green-600">Team</a>
         
         <a href="https://docs.google.com/forms/d/e/1FAIpQLScI73jcXbUT1UbQky4h16ni5ktVahzHGodnOftGGCA65o2hgg/viewform" target="_blank"
            class="mt-8 px-10 py-4 bg-green-600 text-white font-bold rounded-full shadow-lg uppercase tracking-widest text-sm">
@@ -273,14 +273,20 @@
             mobileMenu.classList.remove('mobile-menu-hidden');
             mobileMenu.classList.add('mobile-menu-visible');
             body.classList.add('menu-open');
+            
+            // UPDATED: Added lucide.createIcons() so the new icon actually renders
             menuBtn.innerHTML = '<i data-lucide="x" class="w-6 h-6"></i>';
+            lucide.createIcons(); 
         }
 
         function closeMenu() {
             mobileMenu.classList.remove('mobile-menu-visible');
             mobileMenu.classList.add('mobile-menu-hidden');
             body.classList.remove('menu-open');
+            
+            // UPDATED: Added lucide.createIcons() so the new icon actually renders
             menuBtn.innerHTML = '<i data-lucide="menu" class="w-6 h-6"></i>';
+            lucide.createIcons();
         }
 
         menuBtn.addEventListener('click', () => {
@@ -301,6 +307,7 @@
                 const y = e.clientY - rect.top;
                 const xRotation = -1 * ((y - rect.height/2) / rect.height * 15);
                 const yRotation = (x - rect.width/2) / rect.width * 15;
+                // Perspective is applied here inline, so we don't need it on the body
                 card.style.transform = `perspective(1000px) scale(1.05) rotateX(${xRotation}deg) rotateY(${yRotation}deg)`;
             });
             container.addEventListener('mouseleave', () => {
