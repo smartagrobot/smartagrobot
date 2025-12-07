@@ -33,10 +33,8 @@
             touch-action: none;
         }
 
-        /* --- UPDATED: SUPER INTENSE NEON GLOW --- */
         .neon-text-intense {
             color: #ffffff;
-            /* Multiple layers of shadow for maximum brightness */
             text-shadow: 
                 0 0 5px #fff,
                 0 0 10px #fff,
@@ -46,7 +44,6 @@
                 0 0 60px #22c55e;
         }
 
-        /* --- CHAOTIC FLY-IN ANIMATION (OPTIMIZED) --- */
         .hero-text {
             font-size: clamp(3rem, 13vw, 10rem); 
             line-height: 0.9;
@@ -74,7 +71,6 @@
             }
         }
 
-        /* Glitch Effect */
         .hero-text::before, .hero-text::after {
             content: "AGROBOT.";
             position: absolute;
@@ -112,7 +108,6 @@
             100% { transform: translate(0); }
         }
 
-        /* Subtext Animation */
         .fade-in-delayed {
             opacity: 0;
             animation: simpleFadeUp 1s ease-out forwards;
@@ -132,7 +127,6 @@
         .tilt-card { transition: transform 0.1s ease-out; transform-style: preserve-3d; }
         .tilt-content { transform: translateZ(20px); }
 
-        /* Mobile Menu */
         .mobile-menu-hidden { opacity: 0; pointer-events: none; }
         .mobile-menu-visible { opacity: 1; pointer-events: auto; }
         body.menu-open { overflow: hidden; }
@@ -196,8 +190,6 @@
         <h2 class="neon-text-intense font-black tracking-[0.3em] text-base md:text-2xl mb-2 md:mb-4 animate-pulse relative z-10 fade-in-delayed" style="animation-delay: 2.5s;">AUTOMATED FARMING</h2>
         
         <h1 class="hero-text font-tech font-black text-center mb-4 cursor-default" id="hero-title">AGROBOT.</h1>
-        
-        <p class="text-green-900 font-mono text-xs md:text-sm mt-4 relative z-10 fade-in-delayed" style="animation-delay: 2.8s;">SCROLL TO INITIALIZE SYSTEM</p>
     </section>
 
     <section class="relative bg-zinc-900 min-h-screen z-20 rounded-t-[2rem] md:rounded-t-[3rem] shadow-[0_-20px_60px_rgba(0,0,0,0.5)] mt-4 md:mt-0 overflow-hidden">
@@ -291,6 +283,19 @@
     <script>
         lucide.createIcons();
 
+        // --- NEW LAG-FREE SCROLL LISTENER (Without text logic) ---
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    // Currently no custom scroll visuals are needed for text since text is removed
+                    // but we keep the structure if you add more animations later.
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+
         // --- CHAOTIC RANDOM DIRECTION ANIMATION ---
         document.addEventListener('DOMContentLoaded', () => {
             const titleElement = document.getElementById('hero-title');
@@ -358,11 +363,10 @@
             });
         });
 
-        // --- THREE.JS BACKGROUND (OPTIMIZED) ---
+        // --- THREE.JS BACKGROUND ---
         const initThreeJS = () => {
             const container = document.getElementById('canvas-container');
             const scene = new THREE.Scene();
-            
             const mainGroup = new THREE.Group();
             scene.add(mainGroup);
             mainGroup.position.y = -35; 
@@ -373,59 +377,103 @@
 
             const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
             renderer.setSize(window.innerWidth, window.innerHeight);
-            // Optimization: Limit pixel ratio
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); 
+            renderer.outputEncoding = THREE.sRGBEncoding;
+            renderer.toneMapping = THREE.ACESFilmicToneMapping;
+            renderer.toneMappingExposure = 1.2;
             container.appendChild(renderer.domElement);
 
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.8); 
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.4); 
             scene.add(ambientLight);
-            const dirLight = new THREE.DirectionalLight(0xffffff, 1.5);
-            dirLight.position.set(5, 10, 7);
-            scene.add(dirLight);
-            
-            const dirLight2 = new THREE.DirectionalLight(0xffffff, 1.0);
-            dirLight2.position.set(-5, 5, 2);
-            scene.add(dirLight2);
-
-            const rimLight = new THREE.PointLight(0x86efac, 3.0, 50);
-            rimLight.position.set(-5, 5, -5);
+            const sunLight = new THREE.DirectionalLight(0xffffff, 2.0);
+            sunLight.position.set(10, 20, 10);
+            scene.add(sunLight);
+            const rimLight = new THREE.SpotLight(0x4ade80, 5.0);
+            rimLight.position.set(-20, 10, -10);
+            rimLight.lookAt(0, -35, 0);
             scene.add(rimLight);
 
-            const PARTICLE_COUNT = isMobile ? 10000 : 20000; 
+            const PARTICLE_COUNT = isMobile ? 12000 : 25000; 
             const BALL_RADIUS = 4.5; 
             
             const textureLoader = new THREE.TextureLoader();
-            const grassTexture = textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/master/examples/textures/terrain/grasslight-big.jpg');
-            grassTexture.wrapS = THREE.RepeatWrapping;
-            grassTexture.wrapT = THREE.RepeatWrapping;
-            grassTexture.repeat.set(6, 6);
+            const earthTexture = textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_atmos_2048.jpg');
+            const earthNormalMap = textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_normal_2048.jpg');
+            const earthSpecularMap = textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_specular_2048.jpg');
+            const cloudTexture = textureLoader.load('https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/textures/planets/earth_clouds_1024.png');
 
-            const oceanGeometry = new THREE.SphereGeometry(BALL_RADIUS - 0.05, 48, 48); 
-            const oceanMaterial = new THREE.MeshStandardMaterial({ 
-                color: 0x1e4620, 
-                map: grassTexture,
-                bumpMap: grassTexture,
-                bumpScale: 0.005, 
-                roughness: 0.1, 
-                metalness: 0.2, 
-            });
-            const oceanSphere = new THREE.Mesh(oceanGeometry, oceanMaterial);
-            mainGroup.add(oceanSphere);
-
-            const landGeometry = new THREE.SphereGeometry(BALL_RADIUS, 64, 64);
-            const landMaterial = new THREE.MeshStandardMaterial({ 
-                color: 0x4ade80, 
-                map: grassTexture,
+            // EARTH
+            const earthGeometry = new THREE.SphereGeometry(BALL_RADIUS - 0.05, 64, 64); 
+            const earthMaterial = new THREE.MeshPhysicalMaterial({ 
+                map: earthTexture,
+                color: 0x22c55e, 
+                normalMap: earthNormalMap, 
+                normalScale: new THREE.Vector2(1.5, 1.5), 
+                roughnessMap: earthSpecularMap, 
+                roughness: 0.6,
+                metalness: 0.2,
+                emissive: 0x052e16, 
+                emissiveIntensity: 0.2,
                 transparent: true,
-                bumpMap: grassTexture,
-                bumpScale: 0.02, 
-                roughness: 0.2, 
-                metalness: 0.1,
+                opacity: 1
             });
-            const landSphere = new THREE.Mesh(landGeometry, landMaterial);
-            mainGroup.add(landSphere);
+            const earthSphere = new THREE.Mesh(earthGeometry, earthMaterial);
+            mainGroup.add(earthSphere);
 
-            const geometry = new THREE.BufferGeometry();
+            // ATMOSPHERE
+            const vertexShader = `
+                varying vec3 vNormal;
+                void main() {
+                    vNormal = normalize(normalMatrix * normal);
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                }
+            `;
+            const fragmentShader = `
+                varying vec3 vNormal;
+                void main() {
+                    float intensity = pow(0.65 - dot(vNormal, vec3(0, 0, 1.0)), 4.0);
+                    gl_FragColor = vec4(0.3, 1.0, 0.5, 1.0) * intensity * 2.0;
+                }
+            `;
+            const atmosphereGeometry = new THREE.SphereGeometry(BALL_RADIUS + 1.2, 64, 64);
+            const atmosphereMaterial = new THREE.ShaderMaterial({
+                vertexShader: vertexShader,
+                fragmentShader: fragmentShader,
+                blending: THREE.AdditiveBlending,
+                side: THREE.BackSide,
+                transparent: true,
+                depthWrite: false
+            });
+            const atmosphere = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial);
+            mainGroup.add(atmosphere);
+
+            // CLOUDS
+            const cloudGeometry = new THREE.SphereGeometry(BALL_RADIUS + 0.02, 64, 64);
+            const cloudMaterial = new THREE.MeshStandardMaterial({ 
+                map: cloudTexture,
+                color: 0x86efac, 
+                transparent: true,
+                opacity: 0.4, 
+                blending: THREE.AdditiveBlending,
+                side: THREE.DoubleSide
+            });
+            const cloudSphere = new THREE.Mesh(cloudGeometry, cloudMaterial);
+            mainGroup.add(cloudSphere);
+
+            // STARS
+            const starGeometry = new THREE.BufferGeometry();
+            const starCount = 1000;
+            const starPos = new Float32Array(starCount * 3);
+            for(let i=0; i<starCount*3; i++) {
+                starPos[i] = (Math.random() - 0.5) * 100;
+            }
+            starGeometry.setAttribute('position', new THREE.BufferAttribute(starPos, 3));
+            const starMaterial = new THREE.PointsMaterial({color: 0xffffff, size: 0.1, transparent: true, opacity: 0.5});
+            const stars = new THREE.Points(starGeometry, starMaterial);
+            scene.add(stars); 
+
+            // PARTICLES
+            const particleGeometry = new THREE.BufferGeometry();
             const positions = new Float32Array(PARTICLE_COUNT * 3);
             const originalPositions = new Float32Array(PARTICLE_COUNT * 3);
             const scatterDirections = new Float32Array(PARTICLE_COUNT * 3);
@@ -434,27 +482,25 @@
                 const theta = Math.random() * Math.PI * 2;
                 const phi = Math.acos((Math.random() * 2) - 1);
                 const r = BALL_RADIUS; 
-
                 const x = r * Math.sin(phi) * Math.cos(theta);
                 const y = r * Math.sin(phi) * Math.sin(theta);
                 const z = r * Math.cos(phi);
-
                 positions[i * 3] = x;
                 positions[i * 3 + 1] = y;
                 positions[i * 3 + 2] = z;
-
                 originalPositions[i * 3] = x;
                 originalPositions[i * 3 + 1] = y;
                 originalPositions[i * 3 + 2] = z;
-
-                scatterDirections[i * 3] = (Math.random() - 0.5) * 3.0; 
-                scatterDirections[i * 3 + 1] = (Math.random() - 0.5) * 3.0; 
-                scatterDirections[i * 3 + 2] = (Math.random() - 0.5) * 3.0; 
+                scatterDirections[i * 3] = x / r; 
+                scatterDirections[i * 3 + 1] = y / r; 
+                scatterDirections[i * 3 + 2] = z / r; 
             }
-
-            geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
-            const material = new THREE.PointsMaterial({ color: 0x86efac, size: 0.08, sizeAttenuation: true });
-            const points = new THREE.Points(geometry, material);
+            particleGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+            const particleMaterial = new THREE.PointsMaterial({ 
+                color: 0x4ade80, size: 0.06, sizeAttenuation: true,
+                transparent: true, opacity: 0, blending: THREE.AdditiveBlending
+            });
+            const points = new THREE.Points(particleGeometry, particleMaterial);
             mainGroup.add(points);
 
             let mouseX = 0, mouseY = 0;
@@ -467,41 +513,41 @@
 
             const animate = () => {
                 requestAnimationFrame(animate);
-
-                // --- BALL RISE ANIMATION ---
                 mainGroup.position.y += (0 - mainGroup.position.y) * 0.025;
-
                 const scrollY = window.scrollY;
                 const viewHeight = window.innerHeight;
+                let scatterFactor = Math.min(scrollY / 150, 1); 
                 
-                // Hide ball when scrolled to save resources
-                let scrollRatio = scrollY / 300; 
-                if(scrollRatio > 1) scrollRatio = 1;
-                const opacity = 1 - scrollRatio;
-                oceanSphere.material.opacity = opacity;
-                landSphere.material.opacity = opacity;
-                oceanSphere.visible = opacity > 0.01;
-                landSphere.visible = opacity > 0.01;
+                const earthOp = 1 - scatterFactor * 2.0;
+                earthSphere.material.opacity = earthOp;
+                cloudSphere.material.opacity = 0.4 * earthOp;
+                atmosphere.material.uniformsNeedUpdate = true;
+                atmosphere.visible = earthOp > 0.1;
+                points.material.opacity = Math.min(scatterFactor * 1.5, 1);
+                earthSphere.visible = earthOp > 0;
+                cloudSphere.visible = earthOp > 0;
+                points.visible = points.material.opacity > 0;
 
-                // Rotations
                 camera.position.x += (mouseX * 5 - camera.position.x) * 0.05;
                 camera.position.y += (-mouseY * 5 - camera.position.y) * 0.05;
                 camera.lookAt(scene.position);
-                const autoSpeed = 0.008; 
-                oceanSphere.rotation.y += autoSpeed;
-                landSphere.rotation.y += autoSpeed;
+                
+                const autoSpeed = 0.005; 
+                earthSphere.rotation.y += autoSpeed;
+                cloudSphere.rotation.y += autoSpeed * 1.2; 
                 points.rotation.y += autoSpeed;
+                stars.rotation.y -= 0.0005;
 
-                // --- SCATTER ANIMATION ---
-                let explosionFactor = Math.min(scrollY / viewHeight, 1.5) * 8.0; 
-                const posArray = geometry.attributes.position.array;
+                let explosionDistance = (scrollY / viewHeight) * 12.0; 
+                const posArray = particleGeometry.attributes.position.array;
                 for (let i = 0; i < PARTICLE_COUNT; i++) {
                     const i3 = i * 3;
-                    posArray[i3]     = originalPositions[i3]     + (scatterDirections[i3] * explosionFactor);
-                    posArray[i3 + 1] = originalPositions[i3 + 1] + (scatterDirections[i3 + 1] * explosionFactor);
-                    posArray[i3 + 2] = originalPositions[i3 + 2] + (scatterDirections[i3 + 2] * explosionFactor);
+                    const randomOffset = (i % 5) * 0.5; 
+                    posArray[i3]     = originalPositions[i3]     + (scatterDirections[i3] * (explosionDistance + randomOffset));
+                    posArray[i3 + 1] = originalPositions[i3 + 1] + (scatterDirections[i3 + 1] * (explosionDistance + randomOffset));
+                    posArray[i3 + 2] = originalPositions[i3 + 2] + (scatterDirections[i3 + 2] * (explosionDistance + randomOffset));
                 }
-                geometry.attributes.position.needsUpdate = true;
+                particleGeometry.attributes.position.needsUpdate = true;
                 renderer.render(scene, camera);
             };
             animate();
