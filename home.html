@@ -27,41 +27,35 @@
         ::-webkit-scrollbar-thumb { background: #22c55e; border-radius: 4px; }
         ::-webkit-scrollbar-thumb:hover { background: #4ade80; }
 
-        /* --- LAYERING & ANIMATION CONFIGURATION --- */
-        
-        /* 1. The Canvas (Ball) - BEHIND */
+        /* --- LAYERS --- */
         #canvas-container {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            z-index: 0; 
+            z-index: 0; /* Ball is Behind Menu (60) but In Front of Text (10) */
             pointer-events: auto; 
             touch-action: none;
         }
 
-        /* 2. The Text - IN FRONT */
         .hero-text {
             font-size: clamp(3rem, 13vw, 10rem); 
             line-height: 0.9;
             letter-spacing: -0.05em;
             color: #052e16;
             position: relative;
-            z-index: 10; 
+            z-index: 10; /* Text In Front of Ball? No, user requested BEHIND ball. */
+            /* WAIT. User said "text could come in front of the ball". 
+               In previous turn you asked "text come in front".
+               So Text Z=10, Canvas Z=0. 
+            */
+            
             opacity: 0;
             animation: popInFront 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards; 
             animation-delay: 0.5s; 
         }
 
         @keyframes popInFront {
-            0% {
-                transform: scale(0.8) translateY(20px);
-                opacity: 0;
-                filter: blur(10px);
-            }
-            100% {
-                transform: scale(1) translateY(0);
-                opacity: 1;
-                filter: blur(0px);
-            }
+            0% { transform: scale(0.8) translateY(20px); opacity: 0; filter: blur(10px); }
+            100% { transform: scale(1) translateY(0); opacity: 1; filter: blur(0px); }
         }
 
         /* Glitch Effect */
@@ -106,19 +100,13 @@
             transform: translateY(50px);
             transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
         }
-        .reveal-up.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
+        .reveal-up.active { opacity: 1; transform: translateY(0); }
 
         .stagger-1 { transition-delay: 100ms; }
         .stagger-2 { transition-delay: 200ms; }
         .stagger-3 { transition-delay: 300ms; }
 
-        .tilt-card {
-            transition: transform 0.1s ease-out;
-            transform-style: preserve-3d;
-        }
+        .tilt-card { transition: transform 0.1s ease-out; transform-style: preserve-3d; }
         .tilt-content { transform: translateZ(20px); }
 
         @keyframes float {
@@ -139,9 +127,16 @@
         }
         @keyframes shimmer { to { background-position: 200% center; } }
 
-        /* Lock scroll when menu is open */
-        body.menu-open {
-            overflow: hidden;
+        /* Mobile Menu Classes */
+        /* Hidden state */
+        .mobile-menu-hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+        /* Visible state */
+        .mobile-menu-visible {
+            opacity: 1;
+            pointer-events: auto;
         }
 
         html { scroll-behavior: smooth; }
@@ -160,12 +155,12 @@
             <a href="team.html" class="hover:text-green-600 transition-colors">Team</a>
         </div>
 
-        <a href="home.html" class="md:hidden font-tech font-bold text-xl text-green-900 tracking-wider">
-            AGROBOT<span class="text-green-500">.</span>
+        <a href="home.html" class="md:hidden font-tech font-bold text-xl text-green-900 tracking-wider z-50">
+            AGROBOT.
         </a>
 
-        <button id="menu-btn" class="md:hidden text-green-900 z-50 bg-white/80 p-3 rounded-full backdrop-blur-md shadow-md active:scale-95 transition-transform">
-            <i data-lucide="menu" class="w-6 h-6"></i>
+        <button id="menu-btn" class="md:hidden text-green-900 z-50 bg-white/80 p-2 rounded-lg backdrop-blur-md shadow-sm border border-green-100">
+            <i data-lucide="menu" class="w-7 h-7"></i>
         </button>
 
         <div class="hidden md:flex items-center space-x-6">
@@ -178,20 +173,20 @@
         </div>
     </nav>
 
-    <div id="mobile-menu" class="fixed inset-0 z-[60] bg-[#f0fdf4]/95 backdrop-blur-xl flex flex-col items-center justify-center gap-8 text-2xl font-bold text-green-900 translate-x-full transition-transform duration-300 md:hidden">
+    <div id="mobile-menu" class="fixed inset-0 z-[60] bg-zinc-900/98 backdrop-blur-xl flex flex-col items-center justify-center gap-8 mobile-menu-hidden transition-opacity duration-300">
         
-        <button id="close-menu-btn" class="absolute top-6 right-4 p-3 bg-white rounded-full shadow-lg text-green-900 active:scale-90 transition-transform">
-            <i data-lucide="x" class="w-6 h-6"></i>
+        <button id="close-menu-btn" class="absolute top-6 right-4 p-2 text-white bg-zinc-800 rounded-full">
+            <i data-lucide="x" class="w-8 h-8"></i>
         </button>
 
-        <a href="home.html" class="mobile-link text-3xl font-tech hover:text-green-500 transition-colors">Home</a>
-        <a href="about.html" class="mobile-link text-3xl font-tech hover:text-green-500 transition-colors">About</a>
-        <a href="whyagrobot.html" class="mobile-link text-3xl font-tech hover:text-green-500 transition-colors">Why Agrobot</a>
-        <a href="process.html" class="mobile-link text-3xl font-tech hover:text-green-500 transition-colors">Process</a>
-        <a href="team.html" class="mobile-link text-3xl font-tech hover:text-green-500 transition-colors">Team</a>
+        <a href="home.html" class="mobile-link text-4xl font-tech font-bold text-white hover:text-green-400 transition-colors">Home</a>
+        <a href="about.html" class="mobile-link text-4xl font-tech font-bold text-white hover:text-green-400 transition-colors">About</a>
+        <a href="whyagrobot.html" class="mobile-link text-4xl font-tech font-bold text-white hover:text-green-400 transition-colors">Why Agrobot</a>
+        <a href="process.html" class="mobile-link text-4xl font-tech font-bold text-white hover:text-green-400 transition-colors">Process</a>
+        <a href="team.html" class="mobile-link text-4xl font-tech font-bold text-white hover:text-green-400 transition-colors">Team</a>
         
         <a href="https://docs.google.com/forms/d/e/1FAIpQLScI73jcXbUT1UbQky4h16ni5ktVahzHGodnOftGGCA65o2hgg/viewform" target="_blank"
-           class="mt-8 px-8 py-3 bg-green-600 text-white font-sans text-sm font-bold rounded-full shadow-xl shadow-green-600/30 active:scale-95 transition-transform uppercase tracking-widest">
+           class="mt-8 px-10 py-4 bg-green-500 text-black font-bold rounded-full shadow-[0_0_20px_rgba(34,197,94,0.5)] active:scale-95 transition-transform uppercase tracking-widest text-sm">
             Launch Form
         </a>
     </div>
@@ -201,7 +196,7 @@
         
         <h1 class="hero-text font-tech font-black text-center mb-4 cursor-default">AGROBOT.</h1>
         
-        <p class="text-green-900 font-mono text-xs md:text-sm mt-4 opacity-0 animate-[fadeIn_2s_ease-in_forwards] delay-2000 relative z-10">SCROLL TO INITIALIZE SYSTEM</p>
+        <p class="text-green-900 font-mono text-xs md:text-sm mt-4 relative z-10" style="opacity: 0; animation: popInFront 1.5s forwards 1s;">SCROLL TO INITIALIZE SYSTEM</p>
     </section>
 
     <section class="relative bg-zinc-900 min-h-screen z-20 rounded-t-[2rem] md:rounded-t-[3rem] shadow-[0_-20px_60px_rgba(0,0,0,0.5)] mt-4 md:mt-0 overflow-hidden">
@@ -297,33 +292,29 @@
     <script>
         lucide.createIcons();
 
-        // --- IMPROVED MENU LOGIC ---
+        // --- MENU LOGIC ---
         const menuBtn = document.getElementById('menu-btn');
         const closeMenuBtn = document.getElementById('close-menu-btn');
         const mobileMenu = document.getElementById('mobile-menu');
         const mobileLinks = document.querySelectorAll('.mobile-link');
-        const body = document.body;
-
-        function toggleMenu() {
-            const isClosed = mobileMenu.classList.contains('translate-x-full');
-            if (isClosed) {
-                // Open Menu
-                mobileMenu.classList.remove('translate-x-full');
-                body.classList.add('menu-open');
-            } else {
-                // Close Menu
-                mobileMenu.classList.add('translate-x-full');
-                body.classList.remove('menu-open');
-            }
+        
+        function openMenu() {
+            mobileMenu.classList.remove('mobile-menu-hidden');
+            mobileMenu.classList.add('mobile-menu-visible');
+            document.body.style.overflow = 'hidden'; // Stop scrolling
         }
 
-        menuBtn.addEventListener('click', toggleMenu);
-        closeMenuBtn.addEventListener('click', toggleMenu);
+        function closeMenu() {
+            mobileMenu.classList.remove('mobile-menu-visible');
+            mobileMenu.classList.add('mobile-menu-hidden');
+            document.body.style.overflow = ''; // Restore scrolling
+        }
+
+        menuBtn.addEventListener('click', openMenu);
+        closeMenuBtn.addEventListener('click', closeMenu);
 
         mobileLinks.forEach(link => {
-            link.addEventListener('click', () => {
-                toggleMenu(); // Close on link click
-            });
+            link.addEventListener('click', closeMenu);
         });
 
         // --- 3D TILT EFFECT LOGIC ---
@@ -337,11 +328,9 @@
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
                 
-                // Calculate rotation (max 15 degrees)
                 const xRotation = -1 * ((y - rect.height/2) / rect.height * 15);
                 const yRotation = (x - rect.width/2) / rect.width * 15;
                 
-                // Apply transform
                 card.style.transform = `perspective(1000px) scale(1.05) rotateX(${xRotation}deg) rotateY(${yRotation}deg)`;
             });
 
@@ -354,11 +343,8 @@
         const initThreeJS = () => {
             const container = document.getElementById('canvas-container');
             const scene = new THREE.Scene();
-            // IMPORTANT: Removed background color to ensure text behind is visible if needed, 
-            // but effectively we are using z-index layers now.
-            // scene.background = new THREE.Color(0xf0fdf4); 
-
-            // Create a Group to hold the spheres and points
+            // Transparent background
+            
             const mainGroup = new THREE.Group();
             scene.add(mainGroup);
 
@@ -367,8 +353,6 @@
 
             const isMobile = window.innerWidth < 768;
             const camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 1000);
-            
-            // MOBILE ADJUSTMENT: Move camera back (22) on mobile to keep ball size consistent visually
             camera.position.z = isMobile ? 22 : 15;
 
             const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
@@ -411,7 +395,6 @@
                 metalness: 0.2, 
             });
             const oceanSphere = new THREE.Mesh(oceanGeometry, oceanMaterial);
-            // Add to Group, not Scene
             mainGroup.add(oceanSphere);
 
             const landGeometry = new THREE.SphereGeometry(BALL_RADIUS, 128, 128);
@@ -426,7 +409,6 @@
                 metalness: 0.1,
             });
             const landSphere = new THREE.Mesh(landGeometry, landMaterial);
-            // Add to Group
             mainGroup.add(landSphere);
 
             const geometry = new THREE.BufferGeometry();
@@ -465,7 +447,6 @@
             });
 
             const points = new THREE.Points(geometry, material);
-            // Add to Group
             mainGroup.add(points);
 
             let mouseX = 0;
@@ -478,7 +459,6 @@
                 mouseY = (event.clientY - windowHalfY) * 0.001;
             });
 
-            // TOUCH SUPPORT
             document.addEventListener('touchmove', (event) => {
                 if (event.touches.length > 0) {
                     const touch = event.touches[0];
@@ -490,8 +470,7 @@
             const animate = () => {
                 requestAnimationFrame(animate);
 
-                // --- INTRO ANIMATION: RISE FROM BOTTOM ---
-                // Smoothly lerp the group position from -35 to 0
+                // --- BALL RISES ---
                 mainGroup.position.y += (0 - mainGroup.position.y) * 0.025;
 
                 const scrollY = window.scrollY;
@@ -504,22 +483,18 @@
                 oceanSphere.material.opacity = opacity;
                 landSphere.material.opacity = opacity;
                 
-                // Hide when scrolled out to save resources
                 oceanSphere.visible = opacity > 0.01;
                 landSphere.visible = opacity > 0.01;
 
-                // Mouse Camera Movement
                 camera.position.x += (mouseX * 5 - camera.position.x) * 0.05;
                 camera.position.y += (-mouseY * 5 - camera.position.y) * 0.05;
                 camera.lookAt(scene.position);
 
-                // Rotation
                 const autoSpeed = 0.008; 
                 oceanSphere.rotation.y += autoSpeed;
                 landSphere.rotation.y += autoSpeed;
                 points.rotation.y += autoSpeed;
 
-                // Scroll Explosion Effect
                 let explosionFactor = Math.min(scrollY / viewHeight, 1.5) * 8.0; 
 
                 const posArray = geometry.attributes.position.array;
@@ -539,7 +514,7 @@
 
             window.addEventListener('resize', () => {
                 const newIsMobile = window.innerWidth < 768;
-                camera.position.z = newIsMobile ? 22 : 15; // Mobile adjustment
+                camera.position.z = newIsMobile ? 22 : 15;
 
                 camera.aspect = window.innerWidth / window.innerHeight;
                 camera.updateProjectionMatrix();
